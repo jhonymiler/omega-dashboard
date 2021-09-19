@@ -2,21 +2,25 @@
 
 class Database
 {
-    private $conexao;
+    public $conexao;
 
     public function __construct()
     {
+        if ($db = Sessao::get('db')) {
+            $this->getConnection($db);
+        }
     }
 
-    public function getConnection($host, $db, $user, $senha)
+    public function getConnection($conexao)
     {
 
-        $pdoConfig  = "sqlsrv:" . "Server=" . $host . ";";
-        $pdoConfig .= "Database=" . $db . ";";
+
+        $pdoConfig  = "sqlsrv:" . "Server=" . $conexao['instancia'] . ";";
+        $pdoConfig .= "Database=" . $conexao['banco'] . ";";
 
         try {
             if (!isset($this->conexao)) {
-                $this->conexao =  new PDO($pdoConfig, $user, $senha);
+                $this->conexao =  new PDO($pdoConfig, $conexao['usuario'], $conexao['senha']);
                 $this->conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
             return $this->conexao;

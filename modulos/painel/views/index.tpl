@@ -6,14 +6,13 @@
                     <div class="card-header">
                         <select class="custom-select form-control-border float-left col-md-3" id="consultas"
                             style="font-weight: 600;">
-                            <option>Faturamento x Periodo</option>
-                            <option>Value 2</option>
-                            <option>Value 3</option>
+                            <option value="1">Consulta Padrão</option>
+                            <option value="2">Outra consulta</option>
                         </select>
-                        <button type="button" class="btn btn-default float-left ">
+                        <button type="button" id="botao-edit" class="btn btn-default float-left ">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button type="button" class="btn btn-default float-left ">
+                        <button type="button" id="botao-add" class="btn btn-default float-left ">
                             <i class="fas fa-plus"></i>
                         </button>
 
@@ -26,10 +25,6 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p class="text-center">
-                                    <strong>Relatório do dia: 1 Jan, 2021 - 30 Jul, 2021</strong>
-                                </p>
-
                                 <div class="chart">
                                     <!-- Sales Chart Canvas -->
                                     <div id="grafico" style="min-height: 400px;width:100%"></div>
@@ -40,52 +35,7 @@
                         </div>
                         <!-- /.row -->
                     </div>
-                    <!-- ./card-body -->
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-sm-3 col-6">
-                                <div class="description-block border-right">
-                                    <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>
-                                        17%</span>
-                                    <h5 class="description-header">$35,210.43</h5>
-                                    <span class="description-text">TOTAL REVENUE</span>
-                                </div>
-                                <!-- /.description-block -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-sm-3 col-6">
-                                <div class="description-block border-right">
-                                    <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i>
-                                        0%</span>
-                                    <h5 class="description-header">$10,390.90</h5>
-                                    <span class="description-text">TOTAL COST</span>
-                                </div>
-                                <!-- /.description-block -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-sm-3 col-6">
-                                <div class="description-block border-right">
-                                    <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>
-                                        20%</span>
-                                    <h5 class="description-header">$24,813.53</h5>
-                                    <span class="description-text">TOTAL PROFIT</span>
-                                </div>
-                                <!-- /.description-block -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-sm-3 col-6">
-                                <div class="description-block">
-                                    <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i>
-                                        18%</span>
-                                    <h5 class="description-header">1200</h5>
-                                    <span class="description-text">GOAL COMPLETIONS</span>
-                                </div>
-                                <!-- /.description-block -->
-                            </div>
-                        </div>
-                        <!-- /.row -->
-                    </div>
-                    <!-- /.card-footer -->
+
                 </div>
                 <!-- /.card -->
             </div>
@@ -98,9 +48,13 @@
                     <form method="post" id="consulta">
                         <div class="modal-body">
                             <div class="form-group">
+                                <input type="hidden" value="{$consulta.CON_id}" name="CON_id" />
+
                                 <label for="titulo">Titulo da Consulta</label>
-                                <input id="titulo" name="titulo" class="form-control" type="text" />
+                                <input id="titulo" name="CON_titulo" value="{$consulta.CON_titulo}" class="form-control"
+                                    type="text" />
                             </div>
+
                             <div class="form-group clearfix">
                                 <div class="custom-control custom-switch custom-switch-on-success float-right">
                                     <input type="checkbox" class="custom-control-input" id="tema" checked>
@@ -108,9 +62,38 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <div id="editor-codigo"></div>
-                                <textarea id="codigo" style="display:none;">{$codigo}</textarea>
+                            <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="SQL-tab" data-toggle="pill" href="#SQL" role="tab"
+                                        aria-controls="SQL" aria-selected="true">SQL</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="JAVASCRIPT-tab" data-toggle="pill" href="#JAVASCRIPT"
+                                        role="tab" aria-controls="JAVASCRIPT" aria-selected="false">JAVASCRIPT</a>
+                                </li>
+
+                            </ul>
+                            <div class="tab-content" id="custom-content-below-tabContent">
+                                <div class="tab-pane fade show active" id="SQL" role="tabpanel"
+                                    aria-labelledby="SQL-tab">
+
+                                    <div class="form-group">
+                                        <div id="editor-sql"></div>
+                                        <textarea id="CON_sql" style="display:none;">{$consulta.CON_sql}</textarea>
+                                    </div>
+
+                                </div>
+                                <div class="tab-pane fade" id="JAVASCRIPT" role="tabpanel"
+                                    aria-labelledby="JAVASCRIPT-tab">
+
+                                    <div class="form-group">
+                                        <div id="editor-javascript"></div>
+                                        <textarea id="CON_javascript"
+                                            style="display:none;">{$consulta.CON_javascript}</textarea>
+                                    </div>
+
+                                </div>
+
                             </div>
 
                         </div>
@@ -140,65 +123,6 @@
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
         <script src="{$_pgParams.path_layout}dist/js/dashboard.js"></script>
 
-        <script>
-            var require = {
-                paths: {
-                    'vs': '{$_pgParams.path_layout}plugins/vs',
-                }
-            };
-        </script>
-        <script src="{$_pgParams.path_layout}plugins/vs/loader.js"></script>
-        <script>
-            var edit = document.getElementById("editor-codigo");
-            edit.style.minHeight = '400px';
-            //edit.style.maxHeight = '100vh';
-            edit.style.height = '100%';
-            edit.style.width = '100%';
-            //edit.style.resize = 'vertical';
-            //edit.style.overflow = 'auto';
-
-            var codigo = $('#codigo').val() == '' ? "\n-- Escreva seu código aqui :)" : $('#codigo').val();
-
-            require(['vs/editor/editor.main'], () => {
-                // Initialize the editor
-                const editor = monaco.editor.create(edit, {
-                    theme: 'vs-dark',
-                    model: monaco.editor.createModel(codigo, "sql"),
-                    minimap: {
-                        enabled: true
-                    },
-                    scrollbar: {
-                        vertical: 'auto'
-                    },
-                    language: "sql",
-                    wordWrap: 'wordWrapColumn',
-                    //wordWrapColumn: 40,
-                    // Set this to false to not auto word wrap minified files
-                    wordWrapMinified: true,
-                    // try "same", "indent" or "none"
-                    wrappingIndent: "indent",
-                    autoIndent: true,
-                    automaticLayout: true
-                });
-
-                /*$("#consulta").submit(function() {
-                    alert(editor.getModel().getValue());
-                    return false;
-                });*/
-                const form = document.getElementById("consulta");
-                form.addEventListener("formdata", e => {
-                    e.formData.append('codigo', editor.getModel().getValue());
-                });
-
-                $("#tema").change(function() {
-
-                    var newTheme = $(this).is(":checked") ? 'vs-dark' : 'vs';
-                    monaco.editor.setTheme(newTheme);
-                });
-
-
-            });
-        </script>
 
         <script type="text/javascript">
             CanvasJS.addCultureInfo("ptbr", {
@@ -226,10 +150,9 @@
 
 
             $(function() {
-                var dataPoints1 = [],
-                    dataPoints2 = [],
-                    dataPoints3 = [];
-                var stockChartOptions = {
+                var dados = {$consulta};
+
+                var opcoes = {
                     theme: "light2",
                     exportEnabled: true,
                     title: {
@@ -251,16 +174,14 @@
                             prefix: "R$ ",
                             tickLength: 0,
                             labelFormatter: addSymbols,
-
                         },
                         legend: {
                             verticalAlign: "top"
                         },
                         data: [{
                             showInLegend: true,
-                            //name: "A Pagar",
                             yValueFormatString: "R$ #,###.##",
-                            dataPoints: dataPoints2,
+                            dataPoints: dados, // Dados são obtidos diretamente da consulta em forma de JSON
                             valueFormatString: "DD-MMM"
                         }]
                     }],
@@ -298,16 +219,25 @@
                         }
                     }
                 }
-                {literal}
-                    $.getJSON("https://canvasjs.com/data/docs/ltceur2018.json", function(data) {
-                        for (var i = 0; i < data.length; i++) {
-                            dataPoints1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});;
-                            dataPoints2.push({x: new Date(data[i].date), y: Number(data[i].volume_eur)});
-                            dataPoints3.push({x: new Date(data[i].date), y: Number(data[i].close)});
-                        }
-                        $("#grafico").CanvasJSStockChart(stockChartOptions);
-                    });
-                {/literal}
+                /**
+                 *    Vc pode pegar a variável dados que virá com a informação do banco e tratar 
+                 * através do FOR abaixo, onde vc trás o JSON e trata ele como data ou como número
+                 */
+                var dataPoints = []; // variavel a ser usada com os dados tratados
+
+                if (dataPoints.length > 0) {
+                    /*for (var i = 0; i < data.length; i++) {
+                        dataPoints.push({
+                            x: new Date(data[i].date),
+                            y: Number(data[i].open)
+                        });
+                    }*/
+                }
+                // Essa função chama o gráfico e passa as opções
+                $("#grafico").CanvasJSStockChart(opcoes);
+                /**
+                 * Essa função encurta os valores como por exemplo 1000.000 = 1M
+                 */
                 function addSymbols(e) {
                     var suffixes = ["", "K", "M", "B"];
                     var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
@@ -316,5 +246,107 @@
                     var suffix = suffixes[order];
                     return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
                 }
+            });
+        </script>
+
+
+        <script>
+            var require = {
+                paths: {
+                    'vs': '{$_pgParams.path_layout}plugins/vs',
+                }
+            };
+        </script>
+        <script src="{$_pgParams.path_layout}plugins/vs/loader.js"></script>
+
+        <script>
+            require(['vs/editor/editor.main'], () => {
+
+                //-------------- EDITOR SQL --------------------//
+                var edit_sql = document.getElementById("editor-sql");
+                edit_sql.style.minHeight = '400px';
+                edit_sql.style.height = '100%';
+                edit_sql.style.width = '100%';
+
+                var codigo_sql = $('#CON_sql').val() == '' ? "\n-- Escreva seu código aqui :)" : $(
+                    '#CON_sql').val();
+
+                const editor_sql = monaco.editor;
+                var sql = editor_sql.create(edit_sql, {
+                    theme: 'vs-dark',
+                    model: editor_sql.createModel(codigo_sql, "sql"),
+                    minimap: {
+                        enabled: true
+                    },
+                    scrollbar: {
+                        vertical: 'auto'
+                    },
+                    language: "sql",
+                    wordWrap: 'wordWrapColumn',
+                    //wordWrapColumn: 40,
+                    // Set this to false to not auto word wrap minified files
+                    wordWrapMinified: true,
+                    // try "same", "indent" or "none"
+                    wrappingIndent: "indent",
+                    autoIndent: true,
+                    automaticLayout: true
+                });
+
+                //--------------------- EDITOR JAVASCRIPT ----------------------------/
+                var edit_javascript = document.getElementById("editor-javascript");
+                edit_javascript.style.minHeight = '400px';
+                edit_javascript.style.height = '100%';
+                edit_javascript.style.width = '100%';
+
+                var CON_javascript = $('#CON_javascript').val() == '' ?
+                    "\n // Escreva seu código aqui :)" : $(
+                        '#CON_javascript').val();
+
+                const editor_javascript = monaco.editor;
+
+                var javascript = editor_javascript.create(edit_javascript, {
+                    theme: 'vs-dark',
+                    model: editor_javascript.createModel(CON_javascript, "javascript"),
+                    minimap: {
+                        enabled: true
+                    },
+                    scrollbar: {
+                        vertical: 'auto'
+                    },
+                    language: "javascript",
+                    wordWrap: 'wordWrapColumn',
+                    //wordWrapColumn: 40,
+                    wordWrapMinified: true,
+                    wrappingIndent: "indent",
+                    autoIndent: true,
+                    automaticLayout: true
+                });
+
+                $("#tema").change(function() {
+
+                    var newTheme = $(this).is(":checked") ? 'vs-dark' : 'vs';
+                    monaco.editor.setTheme(newTheme);
+                });
+
+                const form = document.getElementById("consulta");
+                form.addEventListener("formdata", e => {
+                    e.formData.append('CON_sql', sql.getModel().getValue());
+                    e.formData.append('CON_javascript', javascript.getModel().getValue());
+                });
+
+
+            });
+            $(document).ready(function() {
+                if ($('#consultas').val() == '') {
+                    $('#botao-edit').hide();
+                }
+                $('#consultas').change(function() {
+                    if ($(this).val() == '') {
+                        $('#botao-edit').hide();
+                    } else {
+                        $('#botao-edit').show();
+                    }
+                });
+
             });
         </script>

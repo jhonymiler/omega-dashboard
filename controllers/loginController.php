@@ -35,12 +35,8 @@ class loginController extends Controller
         Sessao::set('logado', false);
 
         $db = $this->_user->dados[$this->POST('banco')];
-        $Conexao  = $this->_db->getConnection(
-            $db["instancia"],
-            $db["banco"],
-            $db["usuario"],
-            $db["senha"]
-        );
+        Sessao::set('db', $db);
+        $Conexao  = $this->_db->getConnection($db);
 
         if (!$this->POST('user')) {
             $assign = addMsg('_error', 'Digite um nome de Usuário');
