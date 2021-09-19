@@ -11,7 +11,7 @@ Sistema destinado a demonstração de informações via gráficos
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/jhonymiler/README-template?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/jhonymiler/README-template?style=for-the-badge)
 
-<img src="views/painel/dist/img/tela.png" alt="Home">
+<img src="/views/painel/dist/img/tela.PNG" alt="Home">
 
 ### Aplicações do Sistema
 
