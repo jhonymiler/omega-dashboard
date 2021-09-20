@@ -41,9 +41,12 @@ define('URL_INFS', 'c:\\asix'); // Url par os INFS. (Colocar 2 barras e não col
 
 Rodar o Script SQL que está na pasta Script SQL
 ```
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Consulta_Dashboard]') AND type in (N'U'))
+IF  EXISTS (SELECT * FROM sys.objects 
+WHERE object_id = OBJECT_ID(N'[dbo].[Consulta_Dashboard]') 
+AND type in (N'U'))
 DROP TABLE [dbo].[Consulta_Dashboard]
 GO
+
 SET ANSI_NULLS OFF
 GO
 
