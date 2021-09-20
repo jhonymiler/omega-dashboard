@@ -11,7 +11,7 @@ class Model
     public function __construct()
     {
         $this->_registro = Registro::getInstancia();
-        $this->_db = $this->_registro->_db;
+        $this->_db = $this->_registro->_db->conexao;
         $this->getLibs('data.class');
         $this->_data = Data::getData();
     }

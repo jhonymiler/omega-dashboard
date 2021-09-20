@@ -15,6 +15,7 @@ class painelController extends Controller
     {
         parent::__construct();
         //$this->_view->assign('usuario', $usu_emp);
+
         if (!Sessao::get('logado')) {
             $this->redir('login');
             exit();

@@ -18,21 +18,8 @@ class indexController extends painelController
         parent::__construct();
     }
 
-    public function index($id = false)
+    public function index()
     {
-        $con = $this->loadModel('painel', 'consultas');
-
-        if (isset($_POST['CON_sql'])) {
-            $con->gravaConsulta($_POST);
-        }
-
-        //$consulta = $con->getConsulta($id);
-        $consultas = $con->getConsultas();
-
-        exit();
-        $this->_view->assign('consulta', $consulta);
-        $this->_view->assign('consultas', $consultas);
-        $this->_view->addConteudo('index');
-        $this->_view->renderizar();
+        $this->redir('painel/dashboard');
     }
 }

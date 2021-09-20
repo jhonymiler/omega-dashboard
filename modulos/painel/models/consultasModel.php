@@ -12,12 +12,10 @@
  */
 class consultasModel extends Model
 {
-    public $db;
 
     public function __construct()
     {
         parent::__construct();
-        $this->db = $this->_db->conexao;
     }
 
     /**
@@ -31,42 +29,65 @@ class consultasModel extends Model
      */
     public function gravaConsulta($dados)
     {
-        if ($dados['id'] == '') {
-        } else {
-            $query = $this->db->prepare("    
+        if ($dados['CON_id'] == '') {
+            unset($dados['CON_id']);
+            $query = $this->_db->prepare("    
                 insert into Consulta_Dashboard 
                 (CON_titulo,CON_sql,CON_javascript) 
-                values ('?','?','?')
+                values (:titulo,:sql,:javascritp)
             ");
-            $resultado = $query->execute(
+            $query->execute(
                 array(
-                    $dados['CON_titulo'],
-                    $dados['CON_sql'],
-                    $dados['CON_javascript']
+                    ':titulo' => $dados['CON_titulo'],
+                    ':sql' => $dados['CON_sql'],
+                    ':javascritp' => $dados['CON_javascript']
+                )
+            );
+        } else {
+            $query = $this->_db->prepare("    
+                update Consulta_Dashboard 
+                set CON_titulo=:titulo,CON_sql=:sql,CON_javascript=:javascript
+                where CON_id=:id ;
+            ");
+            $query->execute(
+                array(
+                    ':titulo' => $dados['CON_titulo'],
+                    ':sql' => $dados['CON_sql'],
+                    ':javascript' => $dados['CON_javascript'],
+                    ':id' => $dados['CON_id']
                 )
             );
         }
-        print_r($resultado);
     }
 
     public function getConsultas()
     {
-        $query = $this->db->prepare("select * from Consulta_Dashboard");
+        $query = $this->_db->prepare("select * from Consulta_Dashboard");
         $query->execute();
-        print_r($query->fetchAssoc());
+        return $query->fetchall();
     }
 
     public function getConsulta($id = false)
     {
         if ($id) {
-            $query = $this->db->prepare("select * from Consulta_Dashboard");
-            $query->execute();
-        }
+            $query = $this->_db->prepare("select * from Consulta_Dashboard where CON_id=:id");
+            $query->execute(array(':id' => $id));
+            $dados = $query->fetchall()[0];
 
-        $arr = array();
-        while ($row = $query->fetch()) {
-            $arr[] = '{x: new Date("' . $row[0] . '"), y: ' . $row[1] . '}';
+            $sql = preg_replace('/(\'\'.*?\'\'|\".*?\")|\/\*.*?\*\/|--.*?(?=[\r\n]|$)/', '', $dados['CON_sql']);
+            if ($sql != '') {
+                // Executa a consulta personalizada que estava gravada no banco
+                $CON_sql = $this->_db->query($sql);
+                $CON_sql->execute();
+
+                while ($row = $CON_sql->fetch(PDO::FETCH_ASSOC)) {
+                    $arr[] = json_encode($row);
+                }
+                $dados['dados'] = '[' . implode(',', $arr) . ']';
+            }
+            return $dados;
+        } else {
+            return false;
         }
-        return '[' . implode(',', $arr) . ']';
     }
 }
