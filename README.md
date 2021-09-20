@@ -19,7 +19,7 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 
 - [x] Painel de controle
 - [x] Conexão Banco de dados Omega
-- [ ] Criação de consultas personalizadas
+- [x] Criação de consultas personalizadas
 - [x] Geração de gráficos personalizados
 
 ## 💻 Pré-requisitos
