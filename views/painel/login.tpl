@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
     <head>
@@ -42,7 +42,7 @@
                             <input type="text" name="user" class="form-control" placeholder="Usuário">
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
+                                    <span class="fas fa-user"></span>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="input-group mb-3">
                             <select name="banco" class="form-control" placeholder="Base">
-                                <option>Escolha uma Base</option>
+                                <option value="banco">Escolha uma Base</option>
 
                                 {if (is_array($infs) && count($infs) > 0) }
                                     {foreach from=$infs item="inf" key=i}
@@ -69,7 +69,7 @@
                                 </select>
                                 <div class="input-group-append">
                                     <div class="input-group-text">
-                                        <span class="fas fa-lock"></span>
+                                        <span class="fas fa-database"></span>
                                     </div>
                                 </div>
                             </div>

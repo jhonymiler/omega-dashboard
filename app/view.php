@@ -106,6 +106,7 @@ class View extends Smarty
     {
         $this->assign('navLinks', $this->_navLinks);
         $this->assign('_conteudo', $this->_conteudo);
+
         $this->assign('msg', Sessao::getMsg($limpa = true));
 
         $this->display($this->_paths['template'] . 'index.tpl');

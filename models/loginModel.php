@@ -50,7 +50,7 @@ class LoginModel extends Model
                         $camposInf = explode('|', $string);
 
                         $this->dados[] = array(
-                            'inf' => $camposInf[1],
+                            'inf' => strtoupper($camposInf[1]),
                             'instancia' => $camposInf[2],
                             'banco' => $camposInf[3],
                             'usuario' => $camposInf[4],

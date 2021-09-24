@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
 
     <!-- Brand Logo -->
     <a href="{$_pgParams.RAIZ}painel/" class="brand-link">
@@ -26,51 +26,7 @@
                     </a>
 
                 </li>
-                <li class="nav-item">
-                    <a href="{$_pgParams.RAIZ}painel/empresas" data-link="empresas" class="nav-link">
-                        <i class="nav-icon fas fa-user-tie "></i>
-                        <p>Empresas</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{$_pgParams.RAIZ}painel/os" data-link="os" class="nav-link">
-                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
-                        <p>Ordens de Serviço</p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="{$_pgParams.RAIZ}painel/protocolos" data-link="protocolos" class="nav-link">
-                        <i class="nav-icon fas fa-ticket-alt"></i>
-                        <p>
-                            Protocolos
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{$_pgParams.RAIZ}painel/departamentos" data-link="departamentos" class="nav-link">
-                        <i class="nav-icon fas fa-map-signs"></i>
-                        <p>
-                            Departamentos
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{$_pgParams.RAIZ}painel/usuarios" data-link="usuarios" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Usuários
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{$_pgParams.RAIZ}painel/suporte" data-link="suporte" class="nav-link">
-                        <i class="nav-icon fas fa-question-circle"></i>
-                        <p>
-                            Suporte Online
-                        </p>
-                    </a>
-                </li>
+                
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

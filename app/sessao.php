@@ -3,7 +3,6 @@
 /**
  * ferramenta para manipulação das sessões da pagina
  */
-session_start();
 
 class Sessao
 {
@@ -13,6 +12,8 @@ class Sessao
     public static function init()
     {
         if (!isset($_SESSION)) {
+            session_start();
+
             $_SESSION['id'] = time();
         }
     }
@@ -68,7 +69,7 @@ class Sessao
     public static function addMsg($tipo = 'sucesso', $msg = '')
     {
         $status = '';
-        switch ($status) {
+        switch ($tipo) {
             case 'erro':
                 $status = 'bg-danger';
                 break;
@@ -92,10 +93,10 @@ class Sessao
         );
     }
 
-    public static function getMsg($limpa = true)
+    public static function getMsg($limpa = false)
     {
         $msg = is_array($_SESSION['msg']) ? $_SESSION['msg'] : '';
-        if ($limpa === true) unset($_SESSION['msg']);
+        if ($limpa === true) $_SESSION['msg'] = array();
         return $msg;
     }
 

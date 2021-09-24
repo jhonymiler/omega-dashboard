@@ -112,6 +112,7 @@ abstract class Controller
     //REDIRECIONA A PAGINA
     protected function redir($path = false)
     {
+
         if ($path == false) {
             header('location:' . BASE_URL);
             exit;

@@ -1,11 +1,14 @@
-        <!-- =========================================================== -->
-
+﻿        <!-- =========================================================== -->
+        <style>
+            #header-grafico button {
+                margin: 0 5px;
+            }
+        </style>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <select class="custom-select form-control-border float-left col-md-3" id="consultas"
-                            style="font-weight: 600;">
+                    <div id="header-grafico" class="card-header">
+                        <select class="form-control float-left col-md-4" id="consultas" style="font-weight: 600;">
                             <option value="">Escolha uma Consulta</option>
                             {if is_array($consultas)}
                                 {foreach from=$consultas item="con"}
@@ -13,10 +16,15 @@
                                 {/foreach}
                             {/if}
                         </select>
-                        <button type="button" id="botao-edit" class="btn btn-default float-left ">
+
+
+                        <button type="button" id="botao-delete" class="float-right btn btn-danger float-left "
+                            data-toggle="modal" data-target="#modal-sm"> <i class="fas fa-trash"></i>
+                        </button>
+                        <button type="button" id="botao-edit" class="float-right btn btn-info float-left ">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button type="button" id="botao-add" class="btn btn-default float-left ">
+                        <button type="button" id="botao-add" class="float-right btn btn-success float-left ">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -43,24 +51,43 @@
         <!-- /.row -->
         <div id="janela_modal"></div>
 
-
+        <div class="modal fade" id="modal-sm">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Excluir Consulta</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Deseja mesmo excluir a consulta:</p>
+                        <p><b id='ex-consulta'></b></p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Não</button>
+                        <button type="button" class="btn btn-danger">Sim</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
 
         <!-- PAGE PLUGINS -->
         <!-- jQuery Mapael -->
         <script type="text/javascript" src="{$_pgParams.path_layout}dist/js/canvasjs.stock.min.js"></script>
         <script src="{$_pgParams.path_layout}dist/js/canvasjs.min.js"></script>
         <script src="{$_pgParams.path_layout}plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-        <script src="{$_pgParams.path_layout}plugins/raphael/raphael.min.js"></script>
-        <script src="{$_pgParams.path_layout}plugins/jquery-mapael/jquery.mapael.min.js"></script>
-        <script src="{$_pgParams.path_layout}plugins/jquery-mapael/maps/usa_states.min.js"></script>
+
 
 
         <script type="text/javascript">
             $(function() {
 
-                CanvasJS.addCultureInfo("ptbr", {
-                    decimalSeparator: ".",
-                    digitGroupSeparator: ",",
+                var opcoes = {
+                    decimalSeparator: ",",
+                    digitGroupSeparator: ".",
                     days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
                     resetText: 'Resete',
                     savePNGText: 'Salvar PNG',
@@ -81,7 +108,8 @@
                         toText: "A",
                         rangeText: "Periodo"
                     }
-                });
+                };
+                CanvasJS.addCultureInfo("ptbr", opcoes);
 
 
                 var d = [{
@@ -108,6 +136,7 @@
             };
         </script>
         <script src="{$_pgParams.path_layout}plugins/vs/loader.js"></script>
+        <script src="{$_pgParams.path_layout}plugins/toastr/toastr.min.js"></script>
 
         <script>
             function loadEditor() {
@@ -115,7 +144,7 @@
 
                     //-------------- EDITOR SQL --------------------//
                     var edit_sql = document.getElementById("editor-sql");
-                    edit_sql.style.minHeight = '400px';
+                    edit_sql.style.minHeight = '480px';
                     edit_sql.style.height = '100%';
                     edit_sql.style.width = '100%';
 
@@ -145,7 +174,7 @@
 
                     //--------------------- EDITOR JAVASCRIPT ----------------------------/
                     var edit_javascript = document.getElementById("editor-javascript");
-                    edit_javascript.style.minHeight = '400px';
+                    edit_javascript.style.minHeight = '480px';
                     edit_javascript.style.height = '100%';
                     edit_javascript.style.width = '100%';
 
@@ -192,29 +221,44 @@
 
             $(document).ready(function() {
 
-            loadEditor();
+                loadEditor();
 
-            {if isset($consulta_personalizada.CON_id)}    
-                $('#consultas').val("{$consulta_personalizada.CON_id}");
-            {/if};
+                {if isset($consulta_personalizada.CON_id)}    
+                    $('#consultas').val("{$consulta_personalizada.CON_id}");
+                {/if}
 
-
-            if ($('#consultas').val() == '') {
-                $('#botao-edit').hide();
-            } else {
-                $('#botao-edit').show();
-            }
-
-            $('#consultas').change(function() {
-                if ($(this).val() == '') {
+                if ($('#consultas').val() == '') {
                     $('#botao-edit').hide();
                 } else {
-                    window.location.href = "{$_pgParams.RAIZ}painel/dashboard/index/" + $('#consultas').val();
+                    $('#botao-edit').show();
                 }
-            });
 
-            $("#botao-edit").click(function() {
-                    $.get("{$_pgParams.RAIZ}painel/dashboard/editor/"+$('#consultas').val(),
+                $('#consultas').change(function() {
+                    if ($(this).val() == '') {
+                        $('#botao-edit').hide();
+                    } else {
+                        window.location.href = "{$_pgParams.RAIZ}painel/dashboard/index/" + $('#consultas').val();
+                    }
+                });
+
+                $("#botao-delete").click(function() {
+
+                });
+
+                $("#botao-edit").click(function() {
+                        c = $('#consultas').val()
+                        $.get("{$_pgParams.RAIZ}painel/dashboard/editor/"+c,
+                        function(data) {
+                            $("#janela_modal").html(data);
+                            loadEditor();
+                            $("#modal-xl").modal({
+                                show: true
+                            });
+                        });
+                });
+
+            $("#botao-add").click(function() {
+                    $.get("{$_pgParams.RAIZ}painel/dashboard/editor/", 
                     function(data) {
                         $("#janela_modal").html(data);
                         loadEditor();
@@ -222,16 +266,9 @@
                             show: true
                         });
                     });
-            }); $("#botao-add").click(function() {
-                $.get("{$_pgParams.RAIZ}painel/dashboard/editor/", 
-                function(data) {
-                    $("#janela_modal").html(data);
-                    loadEditor();
-                    $("#modal-xl").modal({
-                        show: true
-                    });
-                });
             });
+
+
 
 
             });

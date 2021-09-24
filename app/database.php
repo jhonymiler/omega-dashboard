@@ -27,7 +27,8 @@ class Database
         } catch (PDOException $e) {
             $mensagem = "Drivers disponiveis: " . implode(",", PDO::getAvailableDrivers());
             $mensagem .= "\nErro: " . $e->getMessage();
-            throw new Exception($mensagem);
+            Sessao::addMsg('erro', $e->getMessage());
+            //throw new Exception($mensagem);
         }
     }
 }

@@ -34,17 +34,20 @@ class loginController extends Controller
     {
         Sessao::set('logado', false);
 
-        $db = $this->_user->dados[$this->POST('banco')];
-        Sessao::set('db', $db);
-        $Conexao  = $this->_db->getConnection($db);
-
         if (!$this->POST('user')) {
-            $assign = addMsg('_error', 'Digite um nome de Usuário');
+            $this->_view->assign('_error', 'Digite um nome de Usuário');
         } elseif (!$this->POST('pass')) {
             $this->_view->assign('_error', 'Digite uma senha');
+        } elseif ($this->POST('banco') == 'banco') {
+            $this->_view->assign('_error', 'Selecione uma base de dados.');
         } else {
 
-            $user = $Conexao->prepare("SELECT NomeCompleto,senha FROM senhas where codigo=:usr");
+            $db = $this->_user->dados[$this->POST('banco')];
+            Sessao::set('db', $db);
+            $Conexao  = $this->_db->getConnection($db);
+
+
+            $user = $Conexao->prepare("SELECT NomeCompleto,senha,codigo FROM senhas where codigo=:usr");
             $user->execute(array(':usr' => $this->POST('user')));
             $usr = $user->fetchAll()[0];
             if (!is_array($usr)) {
@@ -56,6 +59,7 @@ class loginController extends Controller
                     Sessao::set('logado', true);
                     $usuario = array(
                         'nome'           => $usr['NomeCompleto'],
+                        'codigo'         => $usr['codigo'],
                         'sessao'         => time()
                     );
                     Sessao::set('user', $usuario);
@@ -66,6 +70,43 @@ class loginController extends Controller
         }
 
         if (Sessao::get('logado') == true) {
+            $this->redir('painel');
+            exit();
+        } else {
+            $this->index();
+        }
+    }
+
+    public function senha()
+    {
+        if (Sessao::get('logado')) {
+
+            try {
+
+                if ($this->POST('senha') == $this->POST('confirma')) {
+
+                    $Conexao  = $this->_db->getConnection(Sessao::get('db'));
+
+                    $user = $Conexao->prepare("SELECT senha FROM senhas where codigo=:usr");
+                    $user->execute(array(':usr' => Sessao::get('user')['codigo']));
+                    $usr = $user->fetch();
+
+
+                    if ($usr == $this->POST('senha_atual')) {
+                        $user = $Conexao->prepare("UPDATE senhas set senha=:senha where codigo=:usr");
+                        $grava = $user->execute(array(':usr' => Sessao::get('user')['codigo'], ':senha' => $this->_user->senhaEncrypt($this->POST('senha'))));
+                        if (!$grava) {
+                            Sessao::addMsg('erro', 'A senha não foi gravada!');
+                        } else {
+                            Sessao::addMsg('sucesso', 'A senha foi gravada com sucesso!');
+                        }
+                    } else {
+                        Sessao::addMsg('erro', 'Senha atual incorreta!');
+                    }
+                }
+            } catch (PDOException $e) {
+                Sessao::addMsg('erro', addslashes($e->getMessage()));
+            }
             $this->redir('painel');
             exit();
         } else {

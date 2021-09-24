@@ -70,20 +70,28 @@ class consultasModel extends Model
     public function getConsulta($id = false)
     {
         if ($id) {
-            $query = $this->_db->prepare("select * from Consulta_Dashboard where CON_id=:id");
-            $query->execute(array(':id' => $id));
-            $dados = $query->fetchall()[0];
 
-            $sql = preg_replace('/(\'\'.*?\'\'|\".*?\")|\/\*.*?\*\/|--.*?(?=[\r\n]|$)/', '', $dados['CON_sql']);
-            if ($sql != '') {
-                // Executa a consulta personalizada que estava gravada no banco
-                $CON_sql = $this->_db->query($sql);
-                $CON_sql->execute();
 
-                while ($row = $CON_sql->fetch(PDO::FETCH_ASSOC)) {
-                    $arr[] = json_encode($row);
+            try {
+                $query = $this->_db->prepare("select * from Consulta_Dashboard where CON_id=:id");
+                $query->execute(array(':id' => $id));
+                $dados = $query->fetchall()[0];
+
+                $sql = preg_replace('/(\'\'.*?\'\'|\".*?\")|\/\*.*?\*\/|--.*?(?=[\r\n]|$)/', '', $dados['CON_sql']);
+                if ($sql != '') {
+                    // Executa a consulta personalizada que estava gravada no banco
+                    $CON_sql = $this->_db->query($sql);
+                    $CON_sql->execute();
+
+                    if ($CON_sql->rowCount()) {
+                        while ($row = $CON_sql->fetch(PDO::FETCH_ASSOC)) {
+                            $arr[] = json_encode($row);
+                        }
+                        $dados['dados'] = '[' . implode(',', $arr) . ']';
+                    }
                 }
-                $dados['dados'] = '[' . implode(',', $arr) . ']';
+            } catch (PDOException $e) {
+                Sessao::addMsg('erro', addslashes($e->getMessage()));
             }
             return $dados;
         } else {

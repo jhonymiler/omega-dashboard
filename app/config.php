@@ -4,9 +4,12 @@
 define('DS', DIRECTORY_SEPARATOR); // para não dar conflito em sistemas que não são windows 
 define('RAIZ', realpath(dirname(dirname(__FILE__))) . DS); //diretório RAIZ da aplicação
 define('BASE_URL', 'http://localhost/omega-dashboard/'); // url para postagens
-define('URL_INFS', 'c:\\asix'); // Url par os INFS. (Colocar 2 barras e não colocar barra no final)
+define('URL_INFS', 'c:\\Asix'); // url para postagens 
 define('CONTROLE_PATRAO', 'index'); //Controller padão da aplicação
 define('DEFAOULT_LAYOUT', 'painel'); // template padrão
+
+//echo "<h1>".BASE_URL."</h1><Br>";
+//exit();
 
 // DADOS BÁSICOS DO SISTEMA
 define('APP_NOME', 'ARO DASHBOARD'); // template padrão

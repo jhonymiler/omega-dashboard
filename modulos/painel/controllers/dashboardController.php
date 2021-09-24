@@ -16,6 +16,7 @@ class dashboardController extends painelController
     //put your code here
     public function __construct()
     {
+
         parent::__construct();
         $this->con = $this->loadModel('painel', 'consultas');
     }
