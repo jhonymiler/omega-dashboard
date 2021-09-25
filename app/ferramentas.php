@@ -13,6 +13,7 @@ class Ferramentas
     public static function rodar(Requisicao $peticion)
     {
 
+
         $modulo = $peticion->getModulo();
         $controller = $peticion->getController() . 'Controller';
         $metodo = $peticion->getMetodo();
@@ -46,10 +47,6 @@ class Ferramentas
             } else {
                 call_user_func(array($controller, $metodo));
             }
-        } else {
-            require_once RAIZ . 'controllers' . DS . 'erroController.php';
-            $controller = new erroController;
-            call_user_func(array($controller, "index"));
         }
     }
 }

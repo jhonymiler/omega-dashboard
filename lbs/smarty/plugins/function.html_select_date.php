@@ -257,11 +257,11 @@ function smarty_function_html_select_date($params, Smarty_Internal_Template $tem
             $_html_years = '<select name="' . $_name . '"';
             if ($year_id !== null || $all_id !== null) {
                 $_html_years .= ' id="' . smarty_function_escape_special_chars(
-                    $year_id !== null ?
+                        $year_id !== null ?
                             ($year_id ? $year_id : $_name) :
                             ($all_id ? ($all_id . $_name) :
                                 $_name)
-                ) . '"';
+                    ) . '"';
             }
             if ($year_size) {
                 $_html_years .= ' size="' . $year_size . '"';
@@ -292,11 +292,11 @@ function smarty_function_html_select_date($params, Smarty_Internal_Template $tem
         $_html_months = '<select name="' . $_name . '"';
         if ($month_id !== null || $all_id !== null) {
             $_html_months .= ' id="' . smarty_function_escape_special_chars(
-                $month_id !== null ?
+                    $month_id !== null ?
                         ($month_id ? $month_id : $_name) :
                         ($all_id ? ($all_id . $_name) :
                             $_name)
-            ) . '"';
+                ) . '"';
         }
         if ($month_size) {
             $_html_months .= ' size="' . $month_size . '"';

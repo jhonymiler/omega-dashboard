@@ -183,20 +183,12 @@
                 <!-- /.modal-dialog -->
             </div>
 
-            <!-- Main Footer -->
-            <footer class="main-footer">
-                <strong>Copyright &copy; 2021 <a href="https://arocontabilidade.com.br/" target="_blank">Grupo Aro
-                        Contabilidade</a>.</strong>
-                Direitos reservados.
-                <div class="float-right d-none d-sm-inline-block">
-                    <b>Version</b> 1.0.0
-                </div>
-            </footer>
+
         </div>
         <textarea id="campos" style="display: none;">{$campos}</textarea>
         <script type="text/javascript">
             $(document).ready(function() {
-                {if is_array($msg)}
+                {if isset($msg) && is_array($msg)}
                     {foreach item=m from=$msg}
                         $(document).Toasts('create', {
                             toast: true,
@@ -207,9 +199,6 @@
                             body: '{$m.msg}'
                         });
                     {/foreach}
-                    $(".nav-link").removeClass('active');
-                    $("[data-link={$current_link}]").addClass('active');
-
                 {/if}
             });
             {if !empty($campos)}
@@ -273,7 +262,7 @@
                 });
             });
         </script>
-
     </body>
+
 
 </html>

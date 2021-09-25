@@ -16,10 +16,8 @@ class indexController extends Controller
     {
         if (!Sessao::get('logado')) {
             $this->redir('login');
-            exit();
         } else {
             $this->redir('painel');
-            exit();
         }
     }
 }

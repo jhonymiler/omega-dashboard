@@ -60,7 +60,7 @@ class Smarty_Internal_Compile_Function extends Smarty_Internal_CompileBase
         $_name = trim($_attr[ 'name' ], '\'"');
 
         if (!preg_match('/^[a-zA-Z0-9_\x80-\xff]+$/', $_name)) {
-            $compiler->trigger_template_error("Function name contains invalid characters: {$_name}", null, true);
+	        $compiler->trigger_template_error("Function name contains invalid characters: {$_name}", null, true);
         }
 
         $compiler->parent_compiler->tpl_function[ $_name ] = array();
@@ -184,10 +184,8 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase
         $output .= "function {$_funcName}(Smarty_Internal_Template \$_smarty_tpl,\$params) {\n";
         $output .= $_paramsCode;
         $output .= "foreach (\$params as \$key => \$value) {\n\$_smarty_tpl->tpl_vars[\$key] = new Smarty_Variable(\$value, \$_smarty_tpl->isRenderingCache);\n}\n";
-        $output .= $compiler->compileCheckPlugins(array_merge(
-            $compiler->required_plugins[ 'compiled' ],
-            $compiler->required_plugins[ 'nocache' ]
-        ));
+        $output .= $compiler->compileCheckPlugins(array_merge($compiler->required_plugins[ 'compiled' ],
+            $compiler->required_plugins[ 'nocache' ]));
         $output .= "?>\n";
         $compiler->parser->current_buffer->append_subtree(
             $compiler->parser,

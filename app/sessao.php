@@ -11,9 +11,8 @@ class Sessao
      */
     public static function init()
     {
+        session_start();
         if (!isset($_SESSION)) {
-            session_start();
-
             $_SESSION['id'] = time();
         }
     }
@@ -51,18 +50,21 @@ class Sessao
     public static function tempo()
     {
         if (!defined('TIME')) {
-            throw new Exception('O tempo da sessão não foi definido');
+            Sessao::addMsg('erro', 'O tempo da sessão não foi definido');
         }
-
         if (TIME == 0) {
             return;
         }
+        if ($tempo = Sessao::get('tempo')) {
 
-        if (time() - Sessao::get('tempo') > (TIME * 60)) {
-            Sessao::destroy();
-            header('location:' . BASE_URL . 'login');
+            if (time() - $tempo > (TIME * 60)) {
+                Sessao::destroy();
+                header('location:' . BASE_URL . 'login');
+            } else {
+                Sessao::set('tempo', time());
+            }
         } else {
-            Session::set('tempo', time());
+            Sessao::set('tempo', time());
         }
     }
 
@@ -95,8 +97,12 @@ class Sessao
 
     public static function getMsg($limpa = false)
     {
-        $msg = is_array($_SESSION['msg']) ? $_SESSION['msg'] : '';
-        if ($limpa === true) $_SESSION['msg'] = array();
+        $msg = isset($_SESSION['msg']) && is_array($_SESSION['msg']) ? $_SESSION['msg'] : array();
+
+        if ($limpa == true) {
+            $_SESSION['msg'] = array();
+        };
+
         return $msg;
     }
 

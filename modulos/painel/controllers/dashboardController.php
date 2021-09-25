@@ -28,6 +28,7 @@ class dashboardController extends painelController
             $this->con->gravaConsulta($_POST);
         }
 
+        $consultas = $this->con->getConsultas();
         if ($id) {
             $consulta = $this->con->getConsulta($id);
             $this->_view->assign('consulta_personalizada', $consulta);
@@ -39,14 +40,20 @@ class dashboardController extends painelController
                 'CON_javascript' => '',
             );
             $this->_view->assign('consulta_personalizada', $dados);
-            $this->redir('painel/dashboard/index/13');
+            $this->redir('painel/dashboard/index/' . $consultas[0][0]);
         }
 
-        $consultas = $this->con->getConsultas();
 
         $this->_view->assign('consultas', $consultas);
+        $this->_view->assign('msg', Sessao::getMsg(true));
         $this->_view->addConteudo('index');
         $this->_view->renderizar();
+    }
+
+    public function excluir($id = false)
+    {
+        if ($id) $this->con->excluirConsulta($id);
+        $this->redir('painel');
     }
 
     public function editor($id = false)

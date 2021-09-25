@@ -36,7 +36,7 @@ class consultasModel extends Model
                 (CON_titulo,CON_sql,CON_javascript) 
                 values (:titulo,:sql,:javascritp)
             ");
-            $query->execute(
+            $grava = $query->execute(
                 array(
                     ':titulo' => $dados['CON_titulo'],
                     ':sql' => $dados['CON_sql'],
@@ -49,7 +49,7 @@ class consultasModel extends Model
                 set CON_titulo=:titulo,CON_sql=:sql,CON_javascript=:javascript
                 where CON_id=:id ;
             ");
-            $query->execute(
+            $grava = $query->execute(
                 array(
                     ':titulo' => $dados['CON_titulo'],
                     ':sql' => $dados['CON_sql'],
@@ -57,6 +57,29 @@ class consultasModel extends Model
                     ':id' => $dados['CON_id']
                 )
             );
+        }
+        if ($grava) {
+            Sessao::addMsg('sucesso', 'Consulta: <b>' . $dados['CON_titulo'] . '</b> \n gravada com sucesso!');
+        } else {
+            Sessao::addMsg('erro', 'A consulta: <b>' . $dados['CON_titulo'] . '</b> \n não pode ser gravada!');
+        }
+    }
+
+    public function excluirConsulta($id)
+    {
+        if (is_numeric($id)) {
+
+            $query = $this->_db->prepare("DELETE Consulta_Dashboard where CON_id=:id");
+            $grava = $query->execute(
+                array(':id' => $id)
+            );
+        } else {
+            Sessao::addMsg('erro', 'O ID da consulta não é numérico.');
+        }
+        if ($grava) {
+            Sessao::addMsg('sucesso', 'Consulta excluída com sucesso!');
+        } else {
+            Sessao::addMsg('erro', 'A consulta não pode ser excluída!');
         }
     }
 

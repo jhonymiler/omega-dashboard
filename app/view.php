@@ -1,8 +1,9 @@
 <?php
 
 require_once RAIZ . 'lbs' . DS . 'smarty' . DS . 'Smarty.class.php';
+require_once RAIZ . 'lbs' . DS . 'smarty' . DS . 'SmartyBC.class.php';
 
-class View extends Smarty
+class View extends SmartyBC
 {
     private $_request;
     private $_js;
@@ -48,6 +49,8 @@ class View extends Smarty
         $this->cache_dir    = RAIZ . 'tmp' . DS . 'cache' . DS;
         $this->compile_dir  = RAIZ . 'tmp' . DS . 'template' . DS;
         $this->debugging = false;
+
+
         if ($this->_request->getModulo()) {
             $this->_paths['view'] = RAIZ . 'modulos' . DS . $this->_request->getModulo() . DS . 'views' . DS;
         } else {
@@ -106,9 +109,6 @@ class View extends Smarty
     {
         $this->assign('navLinks', $this->_navLinks);
         $this->assign('_conteudo', $this->_conteudo);
-
-        $this->assign('msg', Sessao::getMsg($limpa = true));
-
         $this->display($this->_paths['template'] . 'index.tpl');
     }
 

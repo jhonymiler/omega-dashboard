@@ -18,8 +18,8 @@
                         </select>
 
 
-                        <button type="button" id="botao-delete" class="float-right btn btn-danger float-left "
-                            data-toggle="modal" data-target="#modal-sm"> <i class="fas fa-trash"></i>
+                        <button type="button" class="float-right btn btn-danger float-left " data-toggle="modal"
+                            data-target="#modal-sm"> <i class="fas fa-trash"></i>
                         </button>
                         <button type="button" id="botao-edit" class="float-right btn btn-info float-left ">
                             <i class="fas fa-edit"></i>
@@ -55,18 +55,20 @@
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Excluir Consulta</h4>
+                        <h4 class="modal-title">
+                            {if isset($consulta_personalizada.CON_titulo)}{$consulta_personalizada.CON_titulo}{/if}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Deseja mesmo excluir a consulta:</p>
+                        <h5 style="text-align: center;">Deseja mesmo excluir a consulta?</h5>
+
                         <p><b id='ex-consulta'></b></p>
                     </div>
                     <div class="modal-footer justify-content-between">
+                        <button id="botao-delete" type="button" class="btn btn-danger">Sim</button>
                         <button type="button" class="btn btn-primary" data-dismiss="modal">Não</button>
-                        <button type="button" class="btn btn-danger">Sim</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -242,7 +244,8 @@
                 });
 
                 $("#botao-delete").click(function() {
-
+                    c = $('#consultas').val()
+                    window.location.href = "{$_pgParams.RAIZ}painel/dashboard/excluir/" + c;
                 });
 
                 $("#botao-edit").click(function() {

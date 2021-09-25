@@ -627,11 +627,12 @@ abstract class Smarty_Internal_TemplateCompilerBase
                         $this->trigger_template_error('Illegal number of parameter in "isset()"');
                     }
 
-                    $pa = array();
-                    foreach ($parameter as $p) {
-                        $pa[] = $this->syntaxMatchesVariable($p) ? 'isset(' . $p . ')' : '(' . $p . ' !== null )';
-                    }
-                    return '(' . implode(' && ', $pa) . ')';
+	                $pa = array();
+	                foreach ($parameter as $p) {
+		                $pa[] = $this->syntaxMatchesVariable($p) ? 'isset(' . $p . ')' : '(' . $p . ' !== null )';
+	                }
+	                return '(' . implode(' && ', $pa) . ')';
+
                 } elseif (in_array(
                     $func_name,
                     array(
@@ -666,17 +667,16 @@ abstract class Smarty_Internal_TemplateCompilerBase
         }
     }
 
-    /**
-     * Determines whether the passed string represents a valid (PHP) variable.
-     * This is important, because `isset()` only works on variables and `empty()` can only be passed
-     * a variable prior to php5.5
-     * @param $string
-     * @return bool
-     */
-    private function syntaxMatchesVariable($string)
-    {
-        static $regex_pattern = '/^\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*((->)[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*|\[.*]*\])*$/';
-        return 1 === preg_match($regex_pattern, trim($string));
+	/**
+	 * Determines whether the passed string represents a valid (PHP) variable.
+	 * This is important, because `isset()` only works on variables and `empty()` can only be passed
+	 * a variable prior to php5.5
+	 * @param $string
+	 * @return bool
+	 */
+	private function syntaxMatchesVariable($string) {
+    	static $regex_pattern = '/^\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*((->)[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*|\[.*]*\])*$/';
+    	return 1 === preg_match($regex_pattern, trim($string));
     }
 
     /**
@@ -689,12 +689,13 @@ abstract class Smarty_Internal_TemplateCompilerBase
      */
     public function processText($text)
     {
+
         if (strpos($text, '<') === false) {
-            return preg_replace($this->stripRegEx, '', $text);
+        	return preg_replace($this->stripRegEx, '', $text);
         }
 
-        $store = array();
-        $_store = 0;
+	    $store = array();
+	    $_store = 0;
 
         // capture html elements not to be messed with
         $_offset = 0;
@@ -1106,14 +1107,14 @@ abstract class Smarty_Internal_TemplateCompilerBase
         )
         ) {
             $templateName = $this->template->source->type . ':' . trim(
-                preg_replace(
+                    preg_replace(
                         '![\t\r\n]+!',
                         ' ',
                         strlen($lex->data) > 40 ?
                             substr($lex->data, 0, 40) .
                             '...' : $lex->data
                     )
-            );
+                );
         } else {
             $templateName = $this->template->source->type . ':' . $this->template->source->filepath;
         }
@@ -1215,20 +1216,20 @@ abstract class Smarty_Internal_TemplateCompilerBase
         $this->ldelLength = strlen($ldel);
         $this->ldelPreg = '';
         foreach (str_split($ldel, 1) as $chr) {
-            $this->ldelPreg .= '[' . preg_quote($chr, '/') . ']';
+            $this->ldelPreg .= '[' . preg_quote($chr,'/') . ']';
         }
         $rdel = $this->smarty->getRightDelimiter();
         $this->rdelLength = strlen($rdel);
         $this->rdelPreg = '';
         foreach (str_split($rdel, 1) as $chr) {
-            $this->rdelPreg .= '[' . preg_quote($chr, '/') . ']';
+            $this->rdelPreg .= '[' . preg_quote($chr,'/') . ']';
         }
         $literals = $this->smarty->getLiterals();
         if (!empty($literals)) {
             foreach ($literals as $key => $literal) {
                 $literalPreg = '';
                 foreach (str_split($literal, 1) as $chr) {
-                    $literalPreg .= '[' . preg_quote($chr, '/') . ']';
+                    $literalPreg .= '[' . preg_quote($chr,'/') . ']';
                 }
                 $literals[ $key ] = $literalPreg;
             }

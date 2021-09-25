@@ -14,19 +14,19 @@ class loginController extends Controller
     protected $_user;
     public $_info;
 
-    //put your code here
     public function __construct()
     {
         parent::__construct();
         $this->_user = $this->loadModel('login');
     }
 
+
     public function index()
     {
         Sessao::set('logado', false);
-
         $this->_view->assign('titulo', APP_NOME . ' - LOGIN');
         $this->_view->assign('infs', $this->_user->dados);
+        $this->_view->assign('msg', Sessao::getMsg(true));
         $this->_view->display($this->_view->getPath('view') . 'login.tpl');
     }
 
@@ -63,6 +63,7 @@ class loginController extends Controller
                         'sessao'         => time()
                     );
                     Sessao::set('user', $usuario);
+                    Sessao::tempo(); // Determina o tempo de inatividade da sessão
                 } else {
                     $this->_view->assign('_error', 'Usuário ou senha incorretos');
                 }
@@ -91,10 +92,16 @@ class loginController extends Controller
                     $user->execute(array(':usr' => Sessao::get('user')['codigo']));
                     $usr = $user->fetch();
 
+                    // verifica se a senha antiga está correta
+                    if ($usr['senha'] == $this->_user->senhaEncrypt($this->POST('senha_atual'))) {
 
-                    if ($usr == $this->POST('senha_atual')) {
                         $user = $Conexao->prepare("UPDATE senhas set senha=:senha where codigo=:usr");
-                        $grava = $user->execute(array(':usr' => Sessao::get('user')['codigo'], ':senha' => $this->_user->senhaEncrypt($this->POST('senha'))));
+                        $grava = $user->execute(
+                            array(
+                                ':usr' => Sessao::get('user')['codigo'],
+                                ':senha' => $this->_user->senhaEncrypt($this->POST('senha'))
+                            )
+                        );
                         if (!$grava) {
                             Sessao::addMsg('erro', 'A senha não foi gravada!');
                         } else {
@@ -107,8 +114,8 @@ class loginController extends Controller
             } catch (PDOException $e) {
                 Sessao::addMsg('erro', addslashes($e->getMessage()));
             }
+
             $this->redir('painel');
-            exit();
         } else {
             $this->index();
         }

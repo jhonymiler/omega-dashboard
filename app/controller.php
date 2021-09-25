@@ -18,6 +18,7 @@ abstract class Controller
         $this->_view = new View($this->_request);
         $this->_db = $this->_registro->_db;
 
+        Sessao::tempo(); // verifica o tempo de inatividade da sessão
         if (Sessao::get('user')) {
             $this->_view->assign('user', Sessao::get('user'));
         }
@@ -115,10 +116,10 @@ abstract class Controller
 
         if ($path == false) {
             header('location:' . BASE_URL);
-            exit;
+            exit();
         } else {
             header('location:' . BASE_URL . $path);
-            exit;
+            exit();
         }
     }
 
