@@ -3,6 +3,10 @@
             #header-grafico button {
                 margin: 0 5px;
             }
+
+            .monaco-editor {
+                padding-top: 10px;
+            }
         </style>
         <div class="row">
             <div class="col-md-12">
