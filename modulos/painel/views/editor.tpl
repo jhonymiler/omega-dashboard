@@ -84,6 +84,113 @@
     <!-- /.modal-dialog -->
 </div>
 <script>
+    function loadEditor() {
+        require(['vs/editor/editor.main'], () => {
+
+                {if isset($tema)}
+                    var tema = '{$tema}'
+                    {if $tema == 'vs'}
+                        $("#tema").prop("checked", false);
+                    {/if}
+                {else}
+                    var tema = 'vs-dark'
+                {/if};
+
+                //-------------- EDITOR SQL --------------------//
+                var edit_sql = document.getElementById("editor-sql");
+                edit_sql.style.minHeight =
+                    '480px';
+                edit_sql.style.height = '100%';
+                edit_sql.style.width = '100%';
+
+                var codigo_sql = $('#CON_sql').val() == '' ? "\n-- Escreva seu código aqui :)" : $(
+                    '#CON_sql').val();
+
+
+
+
+                const editor_sql = monaco.editor;
+                var sql = editor_sql.create(edit_sql, {
+                    theme: tema,
+                    model: editor_sql.createModel(codigo_sql, "sql"),
+                    minimap: {
+                        enabled: true
+                    },
+                    scrollbar: {
+                        vertical: 'auto'
+                    },
+                    language: "sql",
+                    wordWrap: 'wordWrapColumn',
+                    //wordWrapColumn: 40,
+                    // Set this to false to not auto word wrap minified files
+                    wordWrapMinified: true,
+                    // try "same", "indent" or "none"
+                    wrappingIndent: "indent",
+                    autoIndent: true,
+                    automaticLayout: true
+                });
+
+                //--------------------- EDITOR JAVASCRIPT ----------------------------/
+                var edit_javascript = document.getElementById("editor-javascript");
+                edit_javascript.style
+                    .minHeight = '480px';
+                edit_javascript.style.height = '100%';
+                edit_javascript.style.width =
+                    '100%';
+
+                var CON_javascript = $('#CON_javascript').val() == '' ?
+                    "\n // Escreva seu código aqui :)" : $(
+                        '#CON_javascript').val();
+
+                const editor_javascript = monaco.editor;
+
+                var javascript = editor_javascript.create(edit_javascript, {
+                    theme: tema,
+                    model: editor_javascript.createModel(CON_javascript, "javascript"),
+                    minimap: {
+                        enabled: true
+                    },
+                    scrollbar: {
+                        vertical: 'auto'
+                    },
+                    language: "javascript",
+                    wordWrap: 'wordWrapColumn',
+                    //wordWrapColumn: 40,
+                    wordWrapMinified: true,
+                    wrappingIndent: "indent",
+                    autoIndent: true,
+                    automaticLayout: true
+                });
+
+
+
+
+
+                $("#tema").change(function() {
+                        var newTheme = $(this).is(":checked") ? 'vs-dark' : 'vs';
+                        monaco.editor.setTheme(newTheme);
+                        $.get("{$_pgParams.RAIZ}painel/dashboard/tema/"+newTheme,
+                        function(data) {
+                            $(document).Toasts('create', {
+                                toast: true,
+                                delay: 5000,
+                                class: 'bg-success',
+                                position: 'topRight',
+                                autohide: true,
+                                body: 'Thema Alterado para: ' + newTheme
+                            });
+                        });
+                });
+
+            const form = document.getElementById("consulta"); form.addEventListener("formdata", e => {
+                e.formData.append('CON_sql', sql.getModel().getValue());
+                e.formData.append('CON_javascript', javascript.getModel().getValue());
+            });
+
+
+        });
+    }
+
     $(document).ready(function() {
 
         $("#salvar").click(function() {

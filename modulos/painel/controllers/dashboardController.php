@@ -58,6 +58,12 @@ class dashboardController extends painelController
 
     public function editor($id = false)
     {
+        if (Sessao::get('tema')) {
+            $this->_view->assign('tema', Sessao::get('tema'));
+        } else {
+            $this->_view->assign('tema', false);
+        }
+
         if ($id) {
             $consulta = $this->con->getConsulta($id);
         } else {
@@ -71,5 +77,18 @@ class dashboardController extends painelController
 
         $this->_view->assign('consulta_personalizada', $consulta);
         $this->_view->display($this->_view->getPath('view') . 'editor.tpl');
+    }
+
+    public function tema($tema = false)
+    {
+        if ($tema) {
+            Sessao::set('tema', $tema);
+        }
+
+        if (Sessao::get('tema')) {
+            echo Sessao::get('tema');
+        } else {
+            echo $this->tema('vs-dark');
+        }
     }
 }
