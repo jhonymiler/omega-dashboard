@@ -88,13 +88,13 @@
         require(['vs/editor/editor.main'], () => {
 
                 {if isset($tema)}
-                    var tema = '{$tema}'
+                    var tema_editor = '{$tema}';
                     {if $tema == 'vs'}
                         $("#tema").prop("checked", false);
                     {/if}
                 {else}
-                    var tema = 'vs-dark'
-                {/if};
+                    {literal}var tema_editor = 'vs-dark';{/literal}
+                {/if}
 
                 //-------------- EDITOR SQL --------------------//
                 var edit_sql = document.getElementById("editor-sql");
@@ -111,7 +111,7 @@
 
                 const editor_sql = monaco.editor;
                 var sql = editor_sql.create(edit_sql, {
-                    theme: tema,
+                    theme: tema_editor,
                     model: editor_sql.createModel(codigo_sql, "sql"),
                     minimap: {
                         enabled: true
@@ -145,7 +145,7 @@
                 const editor_javascript = monaco.editor;
 
                 var javascript = editor_javascript.create(edit_javascript, {
-                    theme: tema,
+                    theme: tema_editor,
                     model: editor_javascript.createModel(CON_javascript, "javascript"),
                     minimap: {
                         enabled: true

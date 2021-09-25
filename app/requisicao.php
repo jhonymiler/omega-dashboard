@@ -22,7 +22,7 @@ class Requisicao
             // Pega a url e ajuda a sanitizar 
             $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_URL);
             // Trata possíveis injections deixando apenas algumas pontuações e alfanumericos
-            $url = preg_replace('/([^a-z0-9.-_\/]+)/i', '', $url);
+            $url = preg_replace('/([^\.\-\_\/a-z0-9]+)/i', '', $url);
             $url = explode('/', $url);
             $this->_navLinks = $url;
             $url = array_filter($url);

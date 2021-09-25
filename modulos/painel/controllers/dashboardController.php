@@ -61,7 +61,8 @@ class dashboardController extends painelController
         if (Sessao::get('tema')) {
             $this->_view->assign('tema', Sessao::get('tema'));
         } else {
-            $this->_view->assign('tema', false);
+            $this->tema('vs-dark');
+            $this->_view->assign('tema', 'vs-dark');
         }
 
         if ($id) {
