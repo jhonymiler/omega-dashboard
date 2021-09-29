@@ -115,7 +115,6 @@
                         rangeText: "Periodo"
                     }
                 };
-                CanvasJS.addCultureInfo("ptbr", opcoes);
 
 
                 var d = [{
