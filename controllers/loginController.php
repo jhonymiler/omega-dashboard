@@ -48,24 +48,26 @@ class loginController extends Controller
 
 
             $user = $Conexao->prepare("SELECT NomeCompleto,senha,codigo FROM senhas where codigo=:usr");
-            $user->execute(array(':usr' => $this->POST('user')));
-            $usr = $user->fetchAll()[0];
-            if (!is_array($usr)) {
-                $this->_view->assign('_error', 'Usuário ou senha incorretos');
-            } else {
-                if ($usr['senha'] == $this->_user->senhaEncrypt($this->POST('pass'))) {
-                    // se a senha for verdadeira
 
-                    Sessao::set('logado', true);
-                    $usuario = array(
-                        'nome'           => $usr['NomeCompleto'],
-                        'codigo'         => $usr['codigo'],
-                        'sessao'         => time()
-                    );
-                    Sessao::set('user', $usuario);
-                    Sessao::tempo(); // Determina o tempo de inatividade da sessão
-                } else {
+            if ($user->execute(array(':usr' => $this->POST('user')))) {
+                $usr = $user->fetch();
+                if (!is_array($usr)) {
                     $this->_view->assign('_error', 'Usuário ou senha incorretos');
+                } else {
+                    if ($usr['senha'] == $this->_user->senhaEncrypt($this->POST('pass'))) {
+                        // se a senha for verdadeira
+
+                        Sessao::set('logado', true);
+                        $usuario = array(
+                            'nome'           => $usr['NomeCompleto'],
+                            'codigo'         => $usr['codigo'],
+                            'sessao'         => time()
+                        );
+                        Sessao::set('user', $usuario);
+                        Sessao::tempo(); // Determina o tempo de inatividade da sessão
+                    } else {
+                        $this->_view->assign('_error', 'Usuário ou senha incorretos');
+                    }
                 }
             }
         }

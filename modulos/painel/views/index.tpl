@@ -8,6 +8,8 @@
                 padding-top: 10px;
             }
         </style>
+        <link rel="stylesheet" href="{$_pgParams.path_layout}dist/css/bootstrap-select.min.css">
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -20,15 +22,16 @@
                                 {/foreach}
                             {/if}
                         </select>
-
-
-                        <button type="button" class="float-right btn btn-danger float-left " data-toggle="modal"
+                        <button type="button" id="permissao" class="btn btn-secondary float-left ">
+                            <i class="fas fa-user-shield"></i>
+                        </button>
+                        <button type="button" class="float-right btn btn-danger" data-toggle="modal"
                             data-target="#modal-sm"> <i class="fas fa-trash"></i>
                         </button>
-                        <button type="button" id="botao-edit" class="float-right btn btn-info float-left ">
+                        <button type="button" id="botao-edit" class="float-right btn btn-info">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button type="button" id="botao-add" class="float-right btn btn-success float-left ">
+                        <button type="button" id="botao-add" class="float-right btn btn-success">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -53,6 +56,73 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
+
+        <div class="modal fade" id="permissao-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Permissões de Usuários</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="permissao-body">
+                        <nav class="navbar navbar-default" role="navigation">
+                            <div class="container-fluid">
+                                <div class="navbar-header">
+                                    <a class="navbar-brand" href="#">Navbar</a>
+                                </div>
+
+                                <form class="navbar-form navbar-left" role="search">
+                                    <div class="form-group">
+                                        <select class="selectpicker" multiple data-live-search="true"
+                                            data-live-search-placeholder="Search" data-actions-box="true">
+                                            <optgroup label="filter1">
+                                                <option>option1</option>
+                                                <option>option2</option>
+                                                <option>option3</option>
+                                                <option>option4</option>
+                                            </optgroup>
+                                            <optgroup label="filter2">
+                                                <option>option1</option>
+                                                <option>option2</option>
+                                                <option>option3</option>
+                                                <option>option4</option>
+                                            </optgroup>
+                                            <optgroup label="filter3">
+                                                <option>option1</option>
+                                                <option>option2</option>
+                                                <option>option3</option>
+                                                <option>option4</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search" name="q">
+
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-default" type="submit"><i
+                                                    class="glyphicon glyphicon-search"></i></button>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Search</button>
+                                </form>
+
+                            </div>
+                            <!-- .container-fluid -->
+                        </nav>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary">Salvar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
         <div id="janela_modal"></div>
 
         <div class="modal fade" id="modal-sm">
@@ -85,6 +155,11 @@
         <script type="text/javascript" src="{$_pgParams.path_layout}dist/js/canvasjs.stock.min.js"></script>
         <script src="{$_pgParams.path_layout}dist/js/canvasjs.min.js"></script>
         <script src="{$_pgParams.path_layout}plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.js" defer></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" defer></script>
+
+        <script src="{$_pgParams.path_layout}dist/js/bootstrap-select.min.js" defer></script>
 
 
 
@@ -164,6 +239,10 @@
                     } else {
                         window.location.href = "{$_pgParams.RAIZ}painel/dashboard/index/" + $('#consultas').val();
                     }
+                });
+
+                $("#permissao").click(function() {
+                    $('#permissao-modal').modal('show');
                 });
 
                 $("#botao-delete").click(function() {
