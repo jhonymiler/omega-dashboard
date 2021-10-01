@@ -59,7 +59,9 @@ class Sessao
 
             if (time() - $tempo > (TIME * 60)) {
                 Sessao::destroy();
-                header('location:' . BASE_URL . 'login');
+                //header('location:' . BASE_URL . 'login');
+                echo '<script>window.location.href = "' . BASE_URL . 'login"</script>';
+                exit();
             } else {
                 Sessao::set('tempo', time());
             }

@@ -188,6 +188,7 @@
         <textarea id="campos" style="display: none;">{$campos}</textarea>
         <script type="text/javascript">
             $(document).ready(function() {
+
                 {if isset($msg) && is_array($msg)}
                     {foreach item=m from=$msg}
                         $(document).Toasts('create', {

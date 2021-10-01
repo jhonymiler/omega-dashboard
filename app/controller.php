@@ -19,6 +19,8 @@ abstract class Controller
         $this->_db = $this->_registro->_db;
 
         Sessao::tempo(); // verifica o tempo de inatividade da sessão
+        $this->_view->assign('time', (TIME * 60) + 1);
+
         if (Sessao::get('user')) {
             $this->_view->assign('user', Sessao::get('user'));
         }

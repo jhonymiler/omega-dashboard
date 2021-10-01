@@ -123,6 +123,11 @@ class loginController extends Controller
         }
     }
 
+    public function timeout()
+    {
+        // função vazia apenas para pingar e verificar se a sessão já expirou
+    }
+
 
     public function sair()
     {

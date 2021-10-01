@@ -8,7 +8,6 @@
                 padding-top: 10px;
             }
         </style>
-        <link rel="stylesheet" href="{$_pgParams.path_layout}dist/css/bootstrap-select.min.css">
 
         <div class="row">
             <div class="col-md-12">
@@ -69,44 +68,22 @@
                     <div class="modal-body" id="permissao-body">
                         <nav class="navbar navbar-default" role="navigation">
                             <div class="container-fluid">
-                                <div class="navbar-header">
-                                    <a class="navbar-brand" href="#">Navbar</a>
-                                </div>
-
                                 <form class="navbar-form navbar-left" role="search">
                                     <div class="form-group">
-                                        <select class="selectpicker" multiple data-live-search="true"
-                                            data-live-search-placeholder="Search" data-actions-box="true">
-                                            <optgroup label="filter1">
-                                                <option>option1</option>
-                                                <option>option2</option>
-                                                <option>option3</option>
-                                                <option>option4</option>
-                                            </optgroup>
-                                            <optgroup label="filter2">
-                                                <option>option1</option>
-                                                <option>option2</option>
-                                                <option>option3</option>
-                                                <option>option4</option>
-                                            </optgroup>
-                                            <optgroup label="filter3">
-                                                <option>option1</option>
-                                                <option>option2</option>
-                                                <option>option3</option>
-                                                <option>option4</option>
-                                            </optgroup>
+                                        <select class="select" multiple data-mdb-filter="true">
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                            <option value="4">Four</option>
+                                            <option value="5">Five</option>
+                                            <option value="6">Six</option>
+                                            <option value="7">Seven</option>
+                                            <option value="8">Eight</option>
+                                            <option value="9">Nine</option>
+                                            <option value="10">Ten</option>
                                         </select>
                                     </div>
 
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search" name="q">
-
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><i
-                                                    class="glyphicon glyphicon-search"></i></button>
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-default">Search</button>
                                 </form>
 
                             </div>
@@ -152,14 +129,12 @@
 
         <!-- PAGE PLUGINS -->
         <!-- jQuery Mapael -->
+        <script src="{$_pgParams.path_layout}dist/js/bootstrap-select.min.js" defer></script>
+
         <script type="text/javascript" src="{$_pgParams.path_layout}dist/js/canvasjs.stock.min.js"></script>
         <script src="{$_pgParams.path_layout}dist/js/canvasjs.min.js"></script>
-        <script src="{$_pgParams.path_layout}plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.js" defer></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" defer></script>
 
-        <script src="{$_pgParams.path_layout}dist/js/bootstrap-select.min.js" defer></script>
 
 
 
@@ -223,36 +198,55 @@
 
 
 
-                {if isset($consulta_personalizada.CON_id)}    
-                    $('#consultas').val("{$consulta_personalizada.CON_id}");
-                {/if}
 
-                if ($('#consultas').val() == '') {
-                    $('#botao-edit').hide();
-                } else {
-                    $('#botao-edit').show();
-                }
 
-                $('#consultas').change(function() {
-                    if ($(this).val() == '') {
+
+
+                    {if isset($consulta_personalizada.CON_id)}    
+                        $('#consultas').val("{$consulta_personalizada.CON_id}");
+
+
+
+
+                    {/if}
+
+                    if ($('#consultas').val() == '') {
                         $('#botao-edit').hide();
                     } else {
-                        window.location.href = "{$_pgParams.RAIZ}painel/dashboard/index/" + $('#consultas').val();
+                        $('#botao-edit').show();
                     }
-                });
 
-                $("#permissao").click(function() {
-                    $('#permissao-modal').modal('show');
-                });
+                    $('#consultas').change(function() {
+                        if ($(this).val() == '') {
+                            $('#botao-edit').hide();
+                        } else {
+                            window.location.href = "{$_pgParams.RAIZ}painel/dashboard/index/" + $('#consultas').val();
+                        }
+                    });
 
-                $("#botao-delete").click(function() {
-                    c = $('#consultas').val()
-                    window.location.href = "{$_pgParams.RAIZ}painel/dashboard/excluir/" + c;
-                });
+                    $("#permissao").click(function() {
+                        $('#permissao-modal').modal('show');
+                    });
 
-                $("#botao-edit").click(function() {
+                    $("#botao-delete").click(function() {
                         c = $('#consultas').val()
-                        $.get("{$_pgParams.RAIZ}painel/dashboard/editor/"+c,
+                        window.location.href = "{$_pgParams.RAIZ}painel/dashboard/excluir/" + c;
+                    });
+
+                    $("#botao-edit").click(function() {
+                            c = $('#consultas').val()
+                            $.get("{$_pgParams.RAIZ}painel/dashboard/editor/"+c,
+                            function(data) {
+                                $("#janela_modal").html(data);
+                                loadEditor();
+                                $("#modal-xl").modal({
+                                    show: true
+                                });
+                            });
+                    });
+
+                $("#botao-add").click(function() {
+                        $.get("{$_pgParams.RAIZ}painel/dashboard/editor/", 
                         function(data) {
                             $("#janela_modal").html(data);
                             loadEditor();
@@ -262,18 +256,13 @@
                         });
                 });
 
-            $("#botao-add").click(function() {
-                    $.get("{$_pgParams.RAIZ}painel/dashboard/editor/", 
-                    function(data) {
-                        $("#janela_modal").html(data);
-                        loadEditor();
-                        $("#modal-xl").modal({
-                            show: true
-                        });
-                    });
-            });
 
-
+            setInterval(function() {
+                $.get("{$_pgParams.RAIZ}login/timeout", 
+                function(data) {
+                    $('body').html(data);
+                });
+            }, {$time}*1000);
 
 
             });
