@@ -131,12 +131,7 @@
         <!-- jQuery Mapael -->
         <script src="{$_pgParams.path_layout}dist/js/bootstrap-select.min.js" defer></script>
 
-        <script type="text/javascript" src="{$_pgParams.path_layout}dist/js/canvasjs.stock.min.js"></script>
         <script src="{$_pgParams.path_layout}dist/js/canvasjs.min.js"></script>
-
-
-
-
 
         <script type="text/javascript">
             $(function() {
