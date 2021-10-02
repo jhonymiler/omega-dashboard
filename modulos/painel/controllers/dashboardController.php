@@ -13,16 +13,19 @@
 class dashboardController extends painelController
 {
     public $con;
+    public $user;
     //put your code here
     public function __construct()
     {
 
         parent::__construct();
         $this->con = $this->loadModel('painel', 'consultas');
+        $this->user = $this->loadModel('painel', 'usuario');
     }
 
     public function index($id = false)
     {
+
 
         if (isset($_POST['CON_sql'])) {
             $this->con->gravaConsulta($_POST);
@@ -43,7 +46,10 @@ class dashboardController extends painelController
             $this->redir('painel/dashboard/index/' . $consultas[0][0]);
         }
 
+        $userList = $this->user->listaUsuarios();
 
+
+        $this->_view->assign('userList', $userList);
         $this->_view->assign('consultas', $consultas);
         $this->_view->assign('msg', Sessao::getMsg(true));
         $this->_view->addConteudo('index');

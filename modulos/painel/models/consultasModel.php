@@ -6,7 +6,7 @@
  */
 
 /**
- * Description of usuarioModulo
+ * Description of consultaModel
  *
  * @author Jonatas
  */
@@ -85,7 +85,7 @@ class consultasModel extends Model
 
     public function getConsultas()
     {
-        $query = $this->_db->prepare("select * from Consulta_Dashboard");
+        $query = $this->_db->prepare("select * from Consulta_Dashboard order by CON_titulo asc");
         $query->execute();
         return $query->fetchall();
     }
@@ -100,6 +100,7 @@ class consultasModel extends Model
                 $query->execute(array(':id' => $id));
                 $dados = $query->fetchall()[0];
 
+                // retira comentários da consulta
                 $sql = preg_replace('/(\'\'.*?\'\'|\".*?\")|\/\*.*?\*\/|--.*?(?=[\r\n]|$)/', '', $dados['CON_sql']);
                 if ($sql != '') {
                     // Executa a consulta personalizada que estava gravada no banco

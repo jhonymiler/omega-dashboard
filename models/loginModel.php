@@ -69,6 +69,7 @@ class LoginModel extends Model
         }
     }
 
+
     /**
      * Função para decriptar senha do Omega
      *

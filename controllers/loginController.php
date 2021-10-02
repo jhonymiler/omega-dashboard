@@ -11,13 +11,15 @@
  */
 class loginController extends Controller
 {
-    protected $_user;
+    protected $login;
     public $_info;
+    public $user;
 
     public function __construct()
     {
         parent::__construct();
-        $this->_user = $this->loadModel('login');
+        $this->login = $this->loadModel('login');
+        $this->user = $this->loadModel('painel', 'usuario');
     }
 
 
@@ -25,7 +27,7 @@ class loginController extends Controller
     {
         Sessao::set('logado', false);
         $this->_view->assign('titulo', APP_NOME . ' - LOGIN');
-        $this->_view->assign('infs', $this->_user->dados);
+        $this->_view->assign('infs', $this->login->dados);
         $this->_view->assign('msg', Sessao::getMsg(true));
         $this->_view->display($this->_view->getPath('view') . 'login.tpl');
     }
@@ -42,7 +44,7 @@ class loginController extends Controller
             $this->_view->assign('_error', 'Selecione uma base de dados.');
         } else {
 
-            $db = $this->_user->dados[$this->POST('banco')];
+            $db = $this->login->dados[$this->POST('banco')];
             Sessao::set('db', $db);
             $Conexao  = $this->_db->getConnection($db);
 
@@ -54,17 +56,25 @@ class loginController extends Controller
                 if (!is_array($usr)) {
                     $this->_view->assign('_error', 'Usuário ou senha incorretos');
                 } else {
-                    if ($usr['senha'] == $this->_user->senhaEncrypt($this->POST('pass'))) {
-                        // se a senha for verdadeira
+                    // se a senha for verdadeira
+                    if ($usr['senha'] == $this->login->senhaEncrypt($this->POST('pass'))) {
 
-                        Sessao::set('logado', true);
-                        $usuario = array(
-                            'nome'           => $usr['NomeCompleto'],
-                            'codigo'         => $usr['codigo'],
-                            'sessao'         => time()
-                        );
-                        Sessao::set('user', $usuario);
-                        Sessao::tempo(); // Determina o tempo de inatividade da sessão
+
+                        // Verifica permissão do usuário
+                        if ($this->user->getPermissaoLogin($usr['codigo'])) {
+                            $permissoes = $this->user->getPermissoes($usr['codigo']);
+
+
+                            Sessao::set('logado', true);
+                            $usuario = array(
+                                'nome'           => $usr['NomeCompleto'],
+                                'codigo'         => $usr['codigo'],
+                                'sessao'         => time()
+                            );
+                            Sessao::set('user', $usuario);
+                            Sessao::tempo(); // Determina o tempo de inatividade da sessão
+
+                        }
                     } else {
                         $this->_view->assign('_error', 'Usuário ou senha incorretos');
                     }
@@ -95,13 +105,13 @@ class loginController extends Controller
                     $usr = $user->fetch();
 
                     // verifica se a senha antiga está correta
-                    if ($usr['senha'] == $this->_user->senhaEncrypt($this->POST('senha_atual'))) {
+                    if ($usr['senha'] == $this->login->senhaEncrypt($this->POST('senha_atual'))) {
 
                         $user = $Conexao->prepare("UPDATE senhas set senha=:senha where codigo=:usr");
                         $grava = $user->execute(
                             array(
                                 ':usr' => Sessao::get('user')['codigo'],
-                                ':senha' => $this->_user->senhaEncrypt($this->POST('senha'))
+                                ':senha' => $this->login->senhaEncrypt($this->POST('senha'))
                             )
                         );
                         if (!$grava) {
