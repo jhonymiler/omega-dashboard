@@ -226,13 +226,13 @@ Criar tabela de controle de permissões de usuários
 */
 
 CREATE TABLE Permissao_Dashboard (
-    PER_id int IDENTITY(1,1) NOT NULL,
-    Codigo varchar(6) NOT NULL,
-    PER_incluir BIT,
+	PER_id BIGINT IDENTITY(1,1) NOT NULL,
+	Codigo varchar(6) NOT NULL,
+	PER_incluir BIT,
 	PER_excluir BIT,
 	PER_ver BIT,
 	PER_editar_permissao BIT,
-	CON_id INT,
+	CON_id BIGINT ,
     PRIMARY KEY (PER_id),
     FOREIGN KEY (CON_id) REFERENCES Consulta_Dashboard(CON_id)
 );
